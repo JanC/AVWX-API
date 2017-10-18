@@ -1,3 +1,6 @@
 *.pyc
 
 */credentials.py
+
+.vs
+.vscode

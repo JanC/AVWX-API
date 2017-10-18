@@ -18,11 +18,11 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 from ast import literal_eval
 #library
+import avwx
 import redis
 from requests import get
 #module
-import avwx
-from .credentials import GN_USER, REDIS_CRED
+from avwxapi.credentials import GN_USER, REDIS_CRED
 
 COORD_URL = 'http://api.geonames.org/findNearByWeatherJSON?lat={}&lng={}&username=' + GN_USER
 HASH_KEYS = ('timestamp', 'standard', 'translate', 'summary', 'speech')
@@ -131,8 +131,7 @@ def handle_report(rtype: str, loc: [str], opts: [str]) -> {str: object}:
     dlevel = data_level(opts)
     rkey = '{}-{}'.format(station, rtype)
     #Fetch hash from redis cache
-    rserv = redis.StrictRedis(host=REDIS_CRED['host'], port=6380, db=0,
-                              password=REDIS_CRED['password'], ssl=True)
+    rserv = redis.StrictRedis(host=REDIS_CRED['host'], port=REDIS_CRED['port'], db=0, ssl=True)
     rhash = dict(zip(HASH_KEYS, rserv.hmget(rkey, HASH_KEYS)))
     rhdt = rhash[HASH_KEYS[0]]
     #If no previous hash or the hash's timestamp is older than two minutes

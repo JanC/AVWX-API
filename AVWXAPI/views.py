@@ -9,10 +9,11 @@ Routes and views for the flask application.
 #library
 import yaml
 from dicttoxml import dicttoxml as fxml
-from flask import request, Response, jsonify
+from flask import Flask, request, Response, jsonify
 #module
-from AVWXAPI import app
-from .avwxhandling import handle_report, parse_given
+from avwxapi.avwxhandling import handle_report, parse_given
+
+app = Flask(__name__)
 
 ##-------------------------------------------------------##
 # Static Web Pages
